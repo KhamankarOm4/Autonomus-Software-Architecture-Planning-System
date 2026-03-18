@@ -149,7 +149,7 @@ Pull requests are welcome 🚀
 
 ## ⭐ Acknowledgements
 - Inspiration from modern AI-based software engineering tools  
-- LangChain & Agentic AI frameworks  
+- LangChain & Agentic AI frameworks.  
 
 ---
 
