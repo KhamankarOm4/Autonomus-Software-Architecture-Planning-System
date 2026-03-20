@@ -39,4 +39,4 @@ Keep answer structured and actionable.
 
     response = llm.invoke(prompt)
     print("\n✅ [Code Analysis Agent] Analysis complete.")
-    return {"output": response.content}
+    return {"analysis_report": response.content}

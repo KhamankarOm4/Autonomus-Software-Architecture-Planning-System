@@ -28,7 +28,18 @@ def parse_python_file(filepath: str) -> Dict:
                 for alias in node.names:
                     imports.append(f"{node.module}.{alias.name}")
         elif isinstance(node, ast.ClassDef):
-            classes.append(node.name)
+            # Extract base classes (inheritance)
+            bases = []
+            for base in node.bases:
+                if isinstance(base, ast.Name):
+                    bases.append(base.id)
+                elif isinstance(base, ast.Attribute):
+                    bases.append(base.attr)
+            
+            if bases:
+                classes.append(f"{node.name} (Inherits: {', '.join(bases)})")
+            else:
+                classes.append(node.name)
         elif isinstance(node, ast.FunctionDef) or isinstance(node, ast.AsyncFunctionDef):
             # Only count top-level or class-level functions if we want to be simple,
             # but ast.walk gets all. We'll just collect names.

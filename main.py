@@ -28,9 +28,11 @@ builder.add_node("code", code_agent)
 # Set router as the conditional entry point
 builder.set_conditional_entry_point(router)
 
-# Both agents are finish/terminal nodes
+# Brownfield flows into Greenfield for architecture refactoring
+builder.add_edge("code", "architecture")
+
+# Only Architecture Agent is the terminal node now
 builder.set_finish_point("architecture")
-builder.set_finish_point("code")
 
 # Compile the graph
 graph = builder.compile()
@@ -95,16 +97,28 @@ def main():
             "input": user_input,
             "mode": mode,
             "ast_summary": ast_summary_text,
-            "output": ""
+            "analysis_report": "",
+            "architecture_plan": ""
         })
 
         # ── Display result ──
-        label = "ARCHITECTURE PLAN" if mode == "greenfield" else "CODE ANALYSIS REPORT"
-        print("\n" + "=" * 60)
-        print(f"📋 [{label}]")
-        print("=" * 60)
-        print(result["output"])
-        print("=" * 60 + "\n")
+        if mode == "brownfield":
+            print("\n" + "=" * 60)
+            print("📋 [CODE ANALYSIS REPORT]")
+            print("=" * 60)
+            print(result.get("analysis_report", "No report generated."))
+            
+            print("\n" + "=" * 60)
+            print("🏗️ [REFACTORED ARCHITECTURE PLAN]")
+            print("=" * 60)
+            print(result.get("architecture_plan", "No architecture plan generated."))
+            print("=" * 60 + "\n")
+        else:
+            print("\n" + "=" * 60)
+            print("🏗️ [ARCHITECTURE PLAN]")
+            print("=" * 60)
+            print(result.get("architecture_plan", "No architecture plan generated."))
+            print("=" * 60 + "\n")
 
 if __name__ == "__main__":
     main()
