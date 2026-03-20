@@ -19,15 +19,20 @@ def code_agent(state: AgentState) -> AgentState:
     prompt = f"""
 You are a software architecture reviewer.
 
-Analyze the following code:
+Analyze the following system:
+
+--- AST STRUCTURAL GRAPH (Dependencies & Classes) ---
+{state.get('ast_summary', 'No structural graph available.')}
+
+--- RAW CODE / DESCRIPTION ---
 {state['input']}
 
 Do the following:
-1. Identify architectural issues (tight coupling, low cohesion, God Object, Spaghetti Code, etc.)
-2. Detect poor modularization or bad separation of concerns
-3. Suggest concrete improvements with examples
-4. Recommend a better architecture if needed
-5. Prioritize issues by severity: High / Medium / Low
+1. Identify architectural issues based heavily on the AST dependency graph (circular dependencies, tight coupling across files, etc.).
+2. Detect poor modularization or bad separation of concerns.
+3. Suggest concrete improvements referencing specific classes or imports from the graph.
+4. Recommend a better architecture if needed.
+5. Prioritize issues by severity: High / Medium / Low.
 
 Keep answer structured and actionable.
 """

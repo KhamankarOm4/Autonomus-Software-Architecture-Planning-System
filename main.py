@@ -14,6 +14,7 @@ from agents.greenfield import architecture_agent
 from agents.brownfield import code_agent
 from agents.router import router
 from agents.utils import read_codebase
+from agents.ast_parser import generate_ast_summary
 
 # ─────────────────────────────────────────────
 # Build and Compile LangGraph
@@ -59,6 +60,8 @@ def main():
             print("⚠️  Please enter 'greenfield' or 'brownfield'.\n")
             continue
 
+        ast_summary_text = ""
+
         # ── Get input ──
         if mode == "greenfield":
             user_input = input("Enter your requirements: ").strip()
@@ -69,11 +72,14 @@ def main():
 
             # Check if the input is actually a valid file or directory path
             if os.path.exists(user_input):
-                print(f"📁 Detected path. Reading codebase from: {user_input} ...")
+                print(f"📁 Detected path. Extracting AST Structural Graph from: {user_input} ...")
+                ast_summary_text = generate_ast_summary(user_input)
+                
+                print(f"📁 Reading full codebase content...")
                 code_content = read_codebase(user_input)
                 if code_content.strip():
                     user_input = code_content
-                    print(f"✅ Loaded {len(code_content)} characters of code.")
+                    print(f"✅ AST Parse complete. Loaded {len(code_content)} characters of code.")
                 else:
                     print("⚠️  No readable code found in path.")
                     continue
@@ -88,6 +94,7 @@ def main():
         result = graph.invoke({
             "input": user_input,
             "mode": mode,
+            "ast_summary": ast_summary_text,
             "output": ""
         })
 
