@@ -21,6 +21,9 @@ You are a software architecture reviewer.
 
 Analyze the following system:
 
+--- PAST ARCHITECTURAL KNOWLEDGE (Company Standard / RAG) ---
+{state.get('past_memory', 'No past memory found.')}
+
 --- AST STRUCTURAL GRAPH (Dependencies & Classes) ---
 {state.get('ast_summary', 'No structural graph available.')}
 
@@ -29,7 +32,7 @@ Analyze the following system:
 
 Do the following:
 1. Identify architectural issues based heavily on the AST dependency graph (circular dependencies, tight coupling across files, etc.).
-2. Detect poor modularization or bad separation of concerns.
+2. Detect poor modularization or bad separation of concerns. Check if it violates PAST ARCHITECTURAL KNOWLEDGE.
 3. Suggest concrete improvements referencing specific classes or imports from the graph.
 4. Recommend a better architecture if needed.
 5. Prioritize issues by severity: High / Medium / Low.
