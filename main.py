@@ -66,6 +66,7 @@ def main():
             continue
 
         ast_summary_text = ""
+        readme_text = ""
 
         # ── Get input ──
         if mode == "forget":
@@ -87,6 +88,12 @@ def main():
 
             # Check if the input is actually a valid file or directory path
             if os.path.exists(user_input):
+                readme_path = os.path.join(user_input, "README.md")
+                if os.path.exists(readme_path):
+                    with open(readme_path, "r", encoding="utf-8") as rf:
+                        readme_text = rf.read()
+                        print("📖 Found README.md. Extracting Project Topic/Idea...")
+
                 print(f"📁 Detected path. Extracting AST Structural Graph from: {user_input} ...")
                 ast_summary_text = generate_ast_summary(user_input)
                 
@@ -118,6 +125,7 @@ def main():
         result = graph.invoke({
             "input": user_input,
             "mode": mode,
+            "readme_content": readme_text,
             "past_memory": past_memory,
             "ast_summary": ast_summary_text,
             "analysis_report": "",

@@ -21,6 +21,9 @@ You are a software architecture reviewer.
 
 Analyze the following system:
 
+--- PROJECT TOPIC / IDEA (README) ---
+{state.get('readme_content', 'No README provided.')}
+
 --- PAST ARCHITECTURAL KNOWLEDGE (Company Standard / RAG) ---
 {state.get('past_memory', 'No past memory found.')}
 

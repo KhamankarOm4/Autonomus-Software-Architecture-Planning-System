@@ -35,11 +35,12 @@ Based on the following context, build or refactor the architecture.
 
 Do the following:
 1. Suggest best architecture (Microservices, MVC, Layered, Event-Driven, etc.). Align with PAST ARCHITECTURAL KNOWLEDGE if relevant.
-2. Suggest design patterns (Factory, Observer, Strategy, etc.)
-3. Provide modular decomposition with key components and their responsibilities
-4. Explain your reasoning clearly
+2. Provide a HIGHLY DETAILED modular decomposition grouped strictly by Topic/Business Domain.
+3. For each Topic/Module, explicitly list the exact Class Names to be built.
+4. Detail exactly how those classes Connect to each other and their relation to one another (Inheritance, Composition, or API calls).
+5. Suggest design patterns (Factory, Observer, Strategy, etc.) to use for those class relations.
 
-Keep answer structured and concise.
+Keep answer structured, extremely detailed, and concise.
 """
 
     response = llm.invoke(prompt)
