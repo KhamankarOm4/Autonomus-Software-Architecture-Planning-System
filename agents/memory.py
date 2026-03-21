@@ -59,8 +59,9 @@ def train_memory(path: str):
         print("⚠️ No valid code or text files found to train on.")
         return
 
-    print(f"✂️ Chunking {len(docs)} files into smaller memory fragments...")
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
+    print(f"✂️ Chunking {len(docs)} files into larger memory fragments...")
+    # Increase chunk size to 4000 to drastically reduce fragment count and speed up training
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=4000, chunk_overlap=500)
     splits = text_splitter.split_documents(docs)
 
     print(f"💾 Saving {len(splits)} memory fragments to VectorDB (Chroma)...")
@@ -84,3 +85,27 @@ def retrieve_memory(query: str, k: int = 3) -> str:
         
     memory_text = "\n\n".join([f"[Source: {doc.metadata.get('source', 'Unknown')}]\n{doc.page_content}" for doc in results])
     return memory_text
+
+def forget_memory(path: str):
+    """
+    Deletes memory fragments belonging to a specific file or resets everything.
+    """
+    if not os.path.exists(DB_DIR):
+        print("⚠️ No memory found to delete.")
+        return
+
+    vector_store = get_vector_store()
+
+    if path.lower() == "all":
+        import shutil
+        shutil.rmtree(DB_DIR, ignore_errors=True)
+        print("🗑️ Entire architectural memory wiped clean.")
+        return
+    
+    # Chroma requires an exact metadata match for deletion
+    try:
+        # The vectorDB uses Document(metadata={"source": path})
+        vector_store._collection.delete(where={"source": path})
+        print(f"🗑️ Forgot all memory snippets trained from: {path}")
+    except Exception as e:
+        print(f"⚠️ Failed to remove memory: {e}")

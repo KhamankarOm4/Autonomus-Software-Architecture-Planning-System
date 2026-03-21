@@ -15,7 +15,7 @@ from agents.brownfield import code_agent
 from agents.router import router
 from agents.utils import read_codebase
 from agents.ast_parser import generate_ast_summary
-from agents.memory import train_memory, retrieve_memory
+from agents.memory import train_memory, retrieve_memory, forget_memory
 
 # ─────────────────────────────────────────────
 # Build and Compile LangGraph
@@ -50,24 +50,30 @@ def main():
     print("   🟢 greenfield → Design a NEW system from requirements")
     print("   🔵 brownfield → Analyze EXISTING code for issues")
     print("   🧠 train      → Teach the agents from past code/architecture")
+    print("   🗑️  forget     → Remove specific files (or all) from training memory")
     print("\nType 'exit' to quit.\n")
 
     while True:
         # ── Get mode ──
-        mode = input("Mode (greenfield / brownfield / train): ").strip().lower()
+        mode = input("Mode (greenfield / brownfield / train / forget): ").strip().lower()
 
         if mode in ("exit", "quit", "q"):
             print("\n👋 Goodbye!")
             break
 
-        if mode not in ("greenfield", "brownfield", "train"):
-            print("⚠️  Please enter 'greenfield', 'brownfield', or 'train'.\n")
+        if mode not in ("greenfield", "brownfield", "train", "forget"):
+            print("⚠️  Please enter a valid mode.\n")
             continue
 
         ast_summary_text = ""
 
         # ── Get input ──
-        if mode == "train":
+        if mode == "forget":
+            print("\n[Forget Mode]")
+            path = input("Enter the EXACT file path to remove (or type 'all' to wipe database): ").strip()
+            forget_memory(path)
+            continue
+        elif mode == "train":
             print("\n[Train Mode]")
             path = input("Enter the project folder or file path to train on: ").strip()
             train_memory(path)
@@ -98,7 +104,13 @@ def main():
             continue
 
         print("\n⏳ Searching for past architectural memories (RAG)...")
-        past_memory = retrieve_memory(user_input)
+        # Prevent context length errors: don't embed the entire codebase in Brownfield mode
+        if mode == "brownfield":
+            search_query = ast_summary_text[:4000] if ast_summary_text else "Software architecture refactoring"
+        else:
+            search_query = user_input
+
+        past_memory = retrieve_memory(search_query)
         
         print("⏳ Processing Graph Pipeline...\n")
 
