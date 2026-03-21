@@ -15,6 +15,7 @@ from agents.brownfield import code_agent
 from agents.router import router
 from agents.utils import read_codebase
 from agents.ast_parser import generate_ast_summary
+from agents.memory import train_memory, retrieve_memory
 
 # ─────────────────────────────────────────────
 # Build and Compile LangGraph
@@ -43,29 +44,35 @@ graph = builder.compile()
 def main():
     print("=" * 60)
     print("  🚀 Autonomous Software Architecture Planning System")
-    print("       Powered by LangGraph + Ollama (llama3)")
+    print("       Powered by LangGraph + Ollama (llama3) + ChromaDB")
     print("=" * 60)
     print("\n📌 Modes:")
     print("   🟢 greenfield → Design a NEW system from requirements")
     print("   🔵 brownfield → Analyze EXISTING code for issues")
+    print("   🧠 train      → Teach the agents from past code/architecture")
     print("\nType 'exit' to quit.\n")
 
     while True:
         # ── Get mode ──
-        mode = input("Mode (greenfield / brownfield): ").strip().lower()
+        mode = input("Mode (greenfield / brownfield / train): ").strip().lower()
 
         if mode in ("exit", "quit", "q"):
             print("\n👋 Goodbye!")
             break
 
-        if mode not in ("greenfield", "brownfield"):
-            print("⚠️  Please enter 'greenfield' or 'brownfield'.\n")
+        if mode not in ("greenfield", "brownfield", "train"):
+            print("⚠️  Please enter 'greenfield', 'brownfield', or 'train'.\n")
             continue
 
         ast_summary_text = ""
 
         # ── Get input ──
-        if mode == "greenfield":
+        if mode == "train":
+            print("\n[Train Mode]")
+            path = input("Enter the project folder or file path to train on: ").strip()
+            train_memory(path)
+            continue
+        elif mode == "greenfield":
             user_input = input("Enter your requirements: ").strip()
         else:
             print("\n[Brownfield Mode]")
@@ -90,12 +97,16 @@ def main():
             print("⚠️  Input cannot be empty.\n")
             continue
 
-        print("\n⏳ Processing...\n")
+        print("\n⏳ Searching for past architectural memories (RAG)...")
+        past_memory = retrieve_memory(user_input)
+        
+        print("⏳ Processing Graph Pipeline...\n")
 
         # ── Run the graph ──
         result = graph.invoke({
             "input": user_input,
             "mode": mode,
+            "past_memory": past_memory,
             "ast_summary": ast_summary_text,
             "analysis_report": "",
             "architecture_plan": ""

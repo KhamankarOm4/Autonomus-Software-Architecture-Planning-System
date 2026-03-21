@@ -25,11 +25,16 @@ def architecture_agent(state: AgentState) -> AgentState:
     prompt = f"""
 You are an expert software architect.
 
-Based on the following context:
+Based on the following context, build or refactor the architecture.
+
 {context}
 
+--- PAST ARCHITECTURAL KNOWLEDGE (RAG Memory) ---
+{state.get('past_memory', 'No past memory found.')}
+-------------------------------------------------
+
 Do the following:
-1. Suggest best architecture (Microservices, MVC, Layered, Event-Driven, etc.)
+1. Suggest best architecture (Microservices, MVC, Layered, Event-Driven, etc.). Align with PAST ARCHITECTURAL KNOWLEDGE if relevant.
 2. Suggest design patterns (Factory, Observer, Strategy, etc.)
 3. Provide modular decomposition with key components and their responsibilities
 4. Explain your reasoning clearly
