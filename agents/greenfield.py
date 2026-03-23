@@ -39,6 +39,7 @@ Do the following:
 3. For each Topic/Module, explicitly list the exact Class Names to be built.
 4. Detail exactly how those classes Connect to each other and their relation to one another (Inheritance, Composition, or API calls).
 5. Suggest design patterns (Factory, Observer, Strategy, etc.) to use for those class relations.
+6. Generate a visual Dependency Graph using Mermaid.js (` ```mermaid graph TD ... ``` `) that plots all the classes and their exact connections to each other.
 
 Keep answer structured, extremely detailed, and concise.
 """
