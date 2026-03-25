@@ -5,9 +5,22 @@ Takes requirements for a NEW system and returns an architecture plan.
 
 from langchain_community.chat_models import ChatOllama
 from agents.state import AgentState
+from pprint import pprint
+import os
+from dotenv import load_dotenv
 
-# Setup LLM (FREE — Ollama local)
-llm = ChatOllama(model="llama3")
+load_dotenv()
+
+# Instantly switch to Groq Cloud API if the key exists, otherwise use local Ollama
+groq_api_key = os.getenv("GROQ_API_KEY")
+if groq_api_key:
+    from langchain_groq import ChatGroq
+    llm = ChatGroq(model="llama-3.3-70b-versatile", groq_api_key=groq_api_key)
+    print("☁️ [Greenfield] Using lightning-fast Groq Cloud API for Llama-3...")
+else:
+    from langchain_community.chat_models import ChatOllama
+    llm = ChatOllama(model="llama3")
+    print("💻 [Greenfield] Using local Ollama for Llama-3...")
 
 def architecture_agent(state: AgentState) -> AgentState:
     """
