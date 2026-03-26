@@ -5,6 +5,7 @@ Extracts classes, functions, and imports from Python files to build a structural
 
 import ast
 import os
+import json
 from typing import Dict, List
 
 def parse_python_file(filepath: str) -> Dict:
@@ -48,7 +49,18 @@ def parse_python_file(filepath: str) -> Dict:
     return {
         "imports": imports,
         "classes": classes,
-        "functions": functions
+        "functions": functions,
+        "raw_classes": [  # structured class info for graph use
+            {
+                "name": node.name,
+                "bases": [
+                    (base.id if isinstance(base, ast.Name) else base.attr)
+                    for base in node.bases
+                    if isinstance(base, (ast.Name, ast.Attribute))
+                ]
+            }
+            for node in ast.walk(tree) if isinstance(node, ast.ClassDef)
+        ]
     }
 
 def generate_ast_summary(path: str) -> str:

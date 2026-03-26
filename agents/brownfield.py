@@ -28,26 +28,31 @@ def code_agent(state: AgentState) -> AgentState:
     """
     print("\n🔵 [Code Analysis Agent] Reviewing existing code...")
 
+    # Truncate sections to stay within Groq's free-tier token limit (~10k tokens max)
+    ast_summary = (state.get('ast_summary') or '')[:4000]
+    readme      = (state.get('readme_content') or '')[:1500]
+    past_memory = (state.get('past_memory') or '')[:1500]
+
     prompt = f"""
 You are a software architecture reviewer.
 
 Analyze the following system:
 
 --- PROJECT TOPIC / IDEA (README) ---
-{state.get('readme_content', 'No README provided.')}
+{readme or 'No README provided.'}
 
 --- PAST ARCHITECTURAL KNOWLEDGE (Company Standard / RAG) ---
-{state.get('past_memory', 'No past memory found.')}
+{past_memory or 'No past memory found.'}
 
 --- AST STRUCTURAL GRAPH (Dependencies & Classes) ---
-{state.get('ast_summary', 'No structural graph available.')}
+{ast_summary or 'No structural graph available.'}
 
---- RAW CODE / DESCRIPTION ---
-{state['input']}
+NOTE: The raw source code is intentionally omitted to stay within token limits.
+Rely on the AST graph above for structural analysis.
 
 Do the following:
-1. Identify architectural issues based heavily on the AST dependency graph (circular dependencies, tight coupling across files, etc.).
-2. Detect poor modularization or bad separation of concerns. Check if it violates PAST ARCHITECTURAL KNOWLEDGE.
+1. Identify architectural issues from the AST graph (circular dependencies, tight coupling, etc.).
+2. Detect poor modularization or separation of concerns.
 3. Suggest concrete improvements referencing specific classes or imports from the graph.
 4. Recommend a better architecture if needed.
 5. Prioritize issues by severity: High / Medium / Low.

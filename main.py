@@ -16,6 +16,7 @@ from agents.router import router
 from agents.utils import read_codebase
 from agents.ast_parser import generate_ast_summary
 from agents.memory import train_memory, retrieve_memory, forget_memory
+from agents.graph_builder import generate_d3_from_ast_summary, generate_d3_graph_from_plan
 
 # ─────────────────────────────────────────────
 # Build and Compile LangGraph
@@ -96,7 +97,10 @@ def main():
 
                 print(f"📁 Detected path. Extracting AST Structural Graph from: {user_input} ...")
                 ast_summary_text = generate_ast_summary(user_input)
-                
+
+                # Build ACCURATE D3 graph from real AST (not LLM hallucination)
+                generate_d3_from_ast_summary(ast_summary_text, output_file="dependency_graph.html")
+
                 print(f"📁 Reading full codebase content...")
                 code_content = read_codebase(user_input)
                 if code_content.strip():
@@ -133,23 +137,27 @@ def main():
         })
 
         # ── Display result ──
+        arch_plan = result.get("architecture_plan", "")
         if mode == "brownfield":
             print("\n" + "=" * 60)
             print("📋 [CODE ANALYSIS REPORT]")
             print("=" * 60)
             print(result.get("analysis_report", "No report generated."))
-            
+
             print("\n" + "=" * 60)
             print("🏗️ [REFACTORED ARCHITECTURE PLAN]")
             print("=" * 60)
-            print(result.get("architecture_plan", "No architecture plan generated."))
+            print(arch_plan)
             print("=" * 60 + "\n")
         else:
+            # Greenfield — render the proposed architecture as D3 graph
             print("\n" + "=" * 60)
             print("🏗️ [ARCHITECTURE PLAN]")
             print("=" * 60)
-            print(result.get("architecture_plan", "No architecture plan generated."))
+            print(arch_plan)
             print("=" * 60 + "\n")
+            if arch_plan:
+                generate_d3_graph_from_plan(arch_plan, output_file="dependency_graph.html")
 
 if __name__ == "__main__":
     main()
