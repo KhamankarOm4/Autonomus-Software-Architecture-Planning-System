@@ -1,42 +1,86 @@
-"""
-FastAPI application entry point.
-Mounts CORS middleware and includes greenfield/brownfield routers.
-"""
-from fastapi import FastAPI
+import os
+from typing import List
+
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from app.routers import greenfield, brownfield
+
+from .schemas import (
+    AnalyzeRequest,
+    AnalyzeResponse,
+    BrownfieldRequest,
+    GreenfieldRequest,
+    MemoryForgetRequest,
+    MemoryTrainRequest,
+)
+from .service import forget_memory_by_path, run_analysis, train_memory_from_path
+
+
+def _split_origins(raw: str) -> List[str]:
+    return [item.strip() for item in raw.split(",") if item.strip()]
+
 
 app = FastAPI(
-    title="Web Architecture Planner",
-    description=(
-        "AI-driven tool that plans and evolves web application architecture. "
-        "Supports Greenfield (start-up planning) and Brownfield (existing code analysis) modes."
-    ),
+    title="Autonomous Architecture Planning API",
     version="1.0.0",
+    description="FastAPI backend for Greenfield/Brownfield agent workflows.",
 )
 
-# CORS — allow frontend dev server
+allowed_origins = _split_origins(os.getenv("CORS_ORIGINS", "http://localhost:3000,http://localhost:5173"))
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://localhost:3000", "*"],
+    allow_origins=allowed_origins or ["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Mount routers
-app.include_router(greenfield.router, tags=["Greenfield"])
-app.include_router(brownfield.router, tags=["Brownfield"])
+
+@app.get("/health")
+def health_check():
+    return {"status": "ok"}
 
 
-@app.get("/", tags=["Health"])
-async def health_check():
-    return {
-        "status": "healthy",
-        "service": "Web Architecture Planner",
-        "version": "1.0.0",
-        "endpoints": [
-            {"method": "POST", "path": "/greenfield", "description": "Analyze project requirements"},
-            {"method": "POST", "path": "/brownfield", "description": "Analyze existing codebase ZIP"},
-        ],
-    }
+@app.post("/api/analyze", response_model=AnalyzeResponse)
+def analyze(payload: AnalyzeRequest):
+    try:
+        result = run_analysis(payload.mode, payload.input)
+        return AnalyzeResponse(**result)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=f"Analysis failed: {exc}") from exc
+
+
+@app.post("/api/greenfield", response_model=AnalyzeResponse)
+def greenfield(payload: GreenfieldRequest):
+    try:
+        result = run_analysis("greenfield", payload.requirements)
+        return AnalyzeResponse(**result)
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=f"Greenfield failed: {exc}") from exc
+
+
+@app.post("/api/brownfield", response_model=AnalyzeResponse)
+def brownfield(payload: BrownfieldRequest):
+    try:
+        result = run_analysis("brownfield", payload.input)
+        return AnalyzeResponse(**result)
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=f"Brownfield failed: {exc}") from exc
+
+
+@app.post("/api/memory/train")
+def train_memory(payload: MemoryTrainRequest):
+    ok, message = train_memory_from_path(payload.path)
+    if not ok:
+        raise HTTPException(status_code=500, detail=message)
+    return {"status": "ok", "message": message}
+
+
+@app.post("/api/memory/forget")
+def forget_memory(payload: MemoryForgetRequest):
+    ok, message = forget_memory_by_path(payload.path)
+    if not ok:
+        raise HTTPException(status_code=500, detail=message)
+    return {"status": "ok", "message": message}
+
