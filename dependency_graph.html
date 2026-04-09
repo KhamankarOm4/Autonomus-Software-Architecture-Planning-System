@@ -103,171 +103,157 @@
   const graphData = {
   "nodes": [
     {
-      "id": "App",
-      "label": "App",
-      "description": "> UserModule",
+      "id": "A",
+      "label": "AuthProvider",
+      "description": "Auth Provider",
       "type": "class"
     },
     {
-      "id": "UserModule",
-      "label": "UserModule",
-      "description": "App --> InventoryModule",
+      "id": "B",
+      "label": "AuthController",
+      "description": "Auth Controller",
       "type": "class"
     },
     {
-      "id": "InventoryModule",
-      "label": "InventoryModule",
-      "description": "App --> PrescriptionModule",
+      "id": "C",
+      "label": "RoleManager",
+      "description": "Role Manager",
       "type": "class"
     },
     {
-      "id": "PrescriptionModule",
-      "label": "PrescriptionModule",
-      "description": "App --> SupplierManagementModule",
+      "id": "D",
+      "label": "UserModel",
+      "description": "User Model",
       "type": "class"
     },
     {
-      "id": "SupplierManagementModule",
-      "label": "SupplierManagementModule",
-      "description": "UserModule --> AboutUs",
+      "id": "E",
+      "label": "ContentService",
+      "description": "Content Service",
       "type": "class"
     },
     {
-      "id": "AboutUs",
-      "label": "AboutUs",
-      "description": "UserModule --> ChatBot",
+      "id": "F",
+      "label": "PostModel",
+      "description": "Post Model",
       "type": "class"
     },
     {
-      "id": "ChatBot",
-      "label": "ChatBot",
-      "description": "UserModule --> Login",
+      "id": "G",
+      "label": "CategoryModel",
+      "description": "Category Model",
       "type": "class"
     },
     {
-      "id": "Login",
-      "label": "Login",
-      "description": "UserModule --> Navbar",
+      "id": "H",
+      "label": "AuthorModel",
+      "description": "Author Model",
       "type": "class"
     },
     {
-      "id": "Navbar",
-      "label": "Navbar",
-      "description": "InventoryModule --> Dashboard",
+      "id": "I",
+      "label": "PrismaClient",
+      "description": "Prisma Client",
       "type": "class"
     },
     {
-      "id": "Dashboard",
-      "label": "Dashboard",
-      "description": "InventoryModule --> Inventory",
+      "id": "J",
+      "label": "DataAccessLayer",
+      "description": "Data Access Layer",
       "type": "class"
     },
     {
-      "id": "Inventory",
-      "label": "Inventory",
-      "description": "Module**: This module will contain the `Dashboard` and `Inventory` components",
+      "id": "K",
+      "label": "PageComponent",
+      "description": "Page Component",
       "type": "class"
     },
     {
-      "id": "PrescriptionSystem",
-      "label": "PrescriptionSystem",
-      "description": "SupplierManagementModule --> DemandForecast",
+      "id": "L",
+      "label": "LayoutComponent",
+      "description": "Layout Component",
       "type": "class"
     },
     {
-      "id": "DemandForecast",
-      "label": "DemandForecast",
-      "description": "SupplierManagementModule --> SupplierManagement",
+      "id": "M",
+      "label": "PostComponent",
+      "description": "Post Component",
       "type": "class"
     },
     {
-      "id": "SupplierManagement",
-      "label": "SupplierManagement",
-      "description": "DemandForecast --> DatabaseService",
+      "id": "N",
+      "label": "CategoryComponent",
+      "description": "Category Component",
       "type": "class"
     },
     {
-      "id": "DatabaseService",
-      "label": "DatabaseService",
-      "description": "SupplierManagement --> DemandForecast",
+      "id": "O",
+      "label": "CloudinaryService",
+      "description": "Cloudinary Service",
+      "type": "class"
+    },
+    {
+      "id": "P",
+      "label": "MediaModel",
+      "description": "Media Model",
       "type": "class"
     }
   ],
   "edges": [
     {
-      "source": "App",
-      "target": "UserModule",
+      "source": "A",
+      "target": "B",
       "label": "uses"
     },
     {
-      "source": "App",
-      "target": "InventoryModule",
+      "source": "A",
+      "target": "C",
+      "label": "extends"
+    },
+    {
+      "source": "A",
+      "target": "D",
       "label": "uses"
     },
     {
-      "source": "App",
-      "target": "PrescriptionModule",
+      "source": "E",
+      "target": "F",
       "label": "uses"
     },
     {
-      "source": "App",
-      "target": "SupplierManagementModule",
+      "source": "E",
+      "target": "G",
       "label": "uses"
     },
     {
-      "source": "UserModule",
-      "target": "AboutUs",
+      "source": "E",
+      "target": "H",
       "label": "uses"
     },
     {
-      "source": "UserModule",
-      "target": "ChatBot",
+      "source": "I",
+      "target": "J",
+      "label": "used by"
+    },
+    {
+      "source": "K",
+      "target": "L",
       "label": "uses"
     },
     {
-      "source": "UserModule",
-      "target": "Login",
+      "source": "K",
+      "target": "M",
       "label": "uses"
     },
     {
-      "source": "UserModule",
-      "target": "Navbar",
+      "source": "K",
+      "target": "N",
       "label": "uses"
     },
     {
-      "source": "InventoryModule",
-      "target": "Dashboard",
-      "label": "uses"
-    },
-    {
-      "source": "InventoryModule",
-      "target": "Inventory",
-      "label": "uses"
-    },
-    {
-      "source": "PrescriptionModule",
-      "target": "PrescriptionSystem",
-      "label": "uses"
-    },
-    {
-      "source": "SupplierManagementModule",
-      "target": "DemandForecast",
-      "label": "uses"
-    },
-    {
-      "source": "SupplierManagementModule",
-      "target": "SupplierManagement",
-      "label": "uses"
-    },
-    {
-      "source": "DemandForecast",
-      "target": "DatabaseService",
-      "label": "uses"
-    },
-    {
-      "source": "SupplierManagement",
-      "target": "DemandForecast",
-      "label": "uses"
+      "source": "O",
+      "target": "P",
+      "label": "used by"
     }
   ]
 };

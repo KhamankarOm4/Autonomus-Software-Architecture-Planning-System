@@ -13,7 +13,7 @@ from agents.state import AgentState
 from agents.greenfield import architecture_agent
 from agents.brownfield import code_agent
 from agents.router import router
-from agents.utils import read_codebase
+from agents.utils import read_codebase, extract_document_text
 from agents.ast_parser import generate_ast_summary
 from agents.memory import train_memory, retrieve_memory, forget_memory
 from agents.graph_builder import generate_d3_from_ast_summary, generate_d3_graph_from_plan
@@ -81,7 +81,15 @@ def main():
             train_memory(path)
             continue
         elif mode == "greenfield":
-            user_input = input("Enter your requirements: ").strip()
+            user_input = input("Enter your requirements (or path to .txt/.pdf/.docx): ").strip().strip('\"\'')
+            if os.path.exists(user_input) and os.path.isfile(user_input):
+                print(f"📄 Reading document: {user_input} ...")
+                extracted_text = extract_document_text(user_input)
+                if extracted_text.startswith("Error"):
+                    print(f"⚠️ {extracted_text}")
+                    continue
+                user_input = extracted_text
+                print(f"✅ Extracted {len(user_input)} characters of requirements.")
         else:
             print("\n[Brownfield Mode]")
             print("You can paste code, describe the system, OR provide a file/folder path.")
