@@ -85,7 +85,7 @@ def main():
         else:
             print("\n[Brownfield Mode]")
             print("You can paste code, describe the system, OR provide a file/folder path.")
-            user_input = input("Enter code or path: ").strip()
+            user_input = input("Enter code or path: ").strip().strip('\"\'')
 
             # Check if the input is actually a valid file or directory path
             if os.path.exists(user_input):
@@ -97,9 +97,6 @@ def main():
 
                 print(f"📁 Detected path. Extracting AST Structural Graph from: {user_input} ...")
                 ast_summary_text = generate_ast_summary(user_input)
-
-                # Build ACCURATE D3 graph from real AST (not LLM hallucination)
-                generate_d3_from_ast_summary(ast_summary_text, output_file="dependency_graph.html")
 
                 print(f"📁 Reading full codebase content...")
                 code_content = read_codebase(user_input)
@@ -156,8 +153,10 @@ def main():
             print("=" * 60)
             print(arch_plan)
             print("=" * 60 + "\n")
-            if arch_plan:
-                generate_d3_graph_from_plan(arch_plan, output_file="dependency_graph.html")
+
+        # In both modes, generate the graph from the Architecture Agent's Mermaid plan
+        if arch_plan:
+            generate_d3_graph_from_plan(arch_plan, output_file="dependency_graph.html")
 
 if __name__ == "__main__":
     main()

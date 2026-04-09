@@ -1,0 +1,286 @@
+=== CODEBASE ARCHITECTURE & DEPENDENCY GRAPH ===
+
+[FILE] next-env.d.ts
+
+[FILE] next.config.ts
+  Imports: next
+
+[FILE] tailwind.config.ts
+  Imports: tailwindcss, tailwindcss-animate
+
+[FILE] prisma\seed.ts
+  Imports: @prisma/client, ../src/frontend/data/mock
+
+[FILE] src\app\layout.tsx
+  Imports: next, sonner, next-auth/react
+  Functions: RootLayout
+
+[FILE] src\app\page.tsx
+  Imports: next, next/link, @/frontend/components/layout/Layout, @/frontend/components/blog/PostCard, @/frontend/components/blog/AdSlot, lucide-react, @/backend/db/data
+  Functions: HomePage
+
+[FILE] src\app\robots.ts
+  Imports: next
+
+[FILE] src\app\sitemap.ts
+  Imports: next, @/backend/db/data, @/frontend/data/mock
+
+[FILE] src\app\admin\layout.tsx
+  Imports: @/backend/auth/auth, next/navigation
+  Functions: AdminLayout
+
+[FILE] src\app\admin\page.tsx
+  Imports: next/link, next/image, @/frontend/components/layout/Layout, lucide-react, @/backend/db/prisma, @/backend/db/data, @/frontend/components/admin/CreatePostForm, @/frontend/data/mock
+  Functions: AdminDashboard
+
+[FILE] src\app\api\auth\[...nextauth]\route.ts
+  Imports: @/backend/auth/auth
+
+[FILE] src\app\author\[slug]\page.tsx
+  Imports: next, next/navigation, next/image, @/frontend/components/layout/Layout, @/frontend/components/blog/PostCard, @/backend/db/data
+  Classes: Props (Interface)
+  Functions: AuthorPage
+
+[FILE] src\app\blog\[slug]\page.tsx
+  Imports: next, next/navigation, next/link, next/image, @/frontend/components/layout/Layout, @/frontend/components/blog/PostCard, lucide-react, @/backend/db/data
+  Classes: Props (Interface)
+  Functions: BlogPostPage
+
+[FILE] src\app\category\[slug]\page.tsx
+  Imports: next, next/navigation, next/link, @/frontend/components/layout/Layout, @/frontend/components/blog/PostCard, @/backend/db/data
+  Classes: Props (Interface)
+  Functions: CategoryPage
+
+[FILE] src\backend\actions\post.actions.ts
+  Imports: @/backend/db/prisma, @/backend/auth/auth, next/cache, next/navigation
+
+[FILE] src\backend\auth\auth.ts
+  Imports: next-auth, next-auth/providers/google, @auth/prisma-adapter, @/backend/db/prisma
+
+[FILE] src\backend\db\data.ts
+  Imports: ./prisma, @/frontend/data/mock
+
+[FILE] src\backend\db\prisma.ts
+  Imports: @prisma/client
+
+[FILE] src\frontend\components\NavLink.tsx
+  Imports: react-router-dom, react, @/lib/utils
+  Classes: NavLinkCompatProps (Interface)
+
+[FILE] src\frontend\components\admin\CreatePostForm.tsx
+  Imports: react, @/backend/actions/post.actions, sonner, lucide-react, next/link, next/dynamic
+  Functions: CreatePostForm
+
+[FILE] src\frontend\components\blog\AdSlot.tsx
+  Classes: AdSlotProps (Interface)
+  Functions: AdSlot
+
+[FILE] src\frontend\components\blog\Breadcrumbs.tsx
+  Imports: next/link, lucide-react
+  Classes: Crumb (Interface)
+  Functions: Breadcrumbs
+
+[FILE] src\frontend\components\blog\PostCard.tsx
+  Imports: next/image, next/link, @/frontend/data/mock, lucide-react
+  Classes: PostCardProps (Interface)
+  Functions: PostCard
+
+[FILE] src\frontend\components\layout\Footer.tsx
+  Imports: next/link, @/frontend/data/mock, lucide-react
+  Functions: Footer
+
+[FILE] src\frontend\components\layout\Layout.tsx
+  Imports: ./Navbar, ./Footer
+  Functions: Layout
+
+[FILE] src\frontend\components\layout\Navbar.tsx
+  Imports: react, next/link, lucide-react, @/frontend/data/mock, next-auth/react
+  Functions: Navbar
+
+[FILE] src\frontend\components\seo\SEOHead.tsx
+  Imports: react
+  Classes: SEOHeadProps (Interface)
+  Functions: SEOHead
+
+[FILE] src\frontend\components\ui\accordion.tsx
+  Imports: react, @radix-ui/react-accordion, lucide-react, @/lib/utils
+
+[FILE] src\frontend\components\ui\alert-dialog.tsx
+  Imports: react, @radix-ui/react-alert-dialog, @/lib/utils, @/frontend/components/ui/button
+  Functions: AlertDialogHeader, AlertDialogFooter
+
+[FILE] src\frontend\components\ui\alert.tsx
+  Imports: react, class-variance-authority, @/lib/utils
+
+[FILE] src\frontend\components\ui\aspect-ratio.tsx
+  Imports: @radix-ui/react-aspect-ratio
+
+[FILE] src\frontend\components\ui\avatar.tsx
+  Imports: react, @radix-ui/react-avatar, @/lib/utils
+
+[FILE] src\frontend\components\ui\badge.tsx
+  Imports: react, class-variance-authority, @/lib/utils
+  Classes: BadgeProps (Interface)
+
+[FILE] src\frontend\components\ui\breadcrumb.tsx
+  Imports: react, @radix-ui/react-slot, lucide-react, @/lib/utils
+  Functions: BreadcrumbSeparator, BreadcrumbEllipsis
+
+[FILE] src\frontend\components\ui\button.tsx
+  Imports: react, @radix-ui/react-slot, class-variance-authority, @/lib/utils
+  Classes: ButtonProps (Interface)
+
+[FILE] src\frontend\components\ui\calendar.tsx
+  Imports: react, lucide-react, react-day-picker, @/lib/utils, @/frontend/components/ui/button
+
+[FILE] src\frontend\components\ui\card.tsx
+  Imports: react, @/lib/utils
+
+[FILE] src\frontend\components\ui\carousel.tsx
+  Imports: react, embla-carousel-react, lucide-react, @/lib/utils, @/frontend/components/ui/button
+
+[FILE] src\frontend\components\ui\chart.tsx
+  Imports: react, recharts, @/lib/utils
+  Functions: ChartStyle
+
+[FILE] src\frontend\components\ui\checkbox.tsx
+  Imports: react, @radix-ui/react-checkbox, lucide-react, @/lib/utils
+
+[FILE] src\frontend\components\ui\collapsible.tsx
+  Imports: @radix-ui/react-collapsible
+
+[FILE] src\frontend\components\ui\command.tsx
+  Imports: react, @radix-ui/react-dialog, cmdk, lucide-react, @/lib/utils, @/frontend/components/ui/dialog
+  Classes: CommandDialogProps (Interface)
+  Functions: CommandDialog, CommandShortcut
+
+[FILE] src\frontend\components\ui\context-menu.tsx
+  Imports: react, @radix-ui/react-context-menu, lucide-react, @/lib/utils
+  Functions: ContextMenuShortcut
+
+[FILE] src\frontend\components\ui\dialog.tsx
+  Imports: react, @radix-ui/react-dialog, lucide-react, @/lib/utils
+  Functions: DialogHeader, DialogFooter
+
+[FILE] src\frontend\components\ui\drawer.tsx
+  Imports: react, vaul, @/lib/utils
+  Functions: Drawer, DrawerHeader, DrawerFooter
+
+[FILE] src\frontend\components\ui\dropdown-menu.tsx
+  Imports: react, @radix-ui/react-dropdown-menu, lucide-react, @/lib/utils
+  Functions: DropdownMenuShortcut
+
+[FILE] src\frontend\components\ui\form.tsx
+  Imports: react, @radix-ui/react-label, @radix-ui/react-slot, react-hook-form, @/lib/utils, @/frontend/components/ui/label
+
+[FILE] src\frontend\components\ui\hover-card.tsx
+  Imports: react, @radix-ui/react-hover-card, @/lib/utils
+
+[FILE] src\frontend\components\ui\input-otp.tsx
+  Imports: react, input-otp, lucide-react, @/lib/utils
+
+[FILE] src\frontend\components\ui\input.tsx
+  Imports: react, @/lib/utils
+
+[FILE] src\frontend\components\ui\label.tsx
+  Imports: react, @radix-ui/react-label, class-variance-authority, @/lib/utils
+
+[FILE] src\frontend\components\ui\menubar.tsx
+  Imports: react, @radix-ui/react-menubar, lucide-react, @/lib/utils
+  Functions: MenubarShortcut
+
+[FILE] src\frontend\components\ui\navigation-menu.tsx
+  Imports: react, @radix-ui/react-navigation-menu, class-variance-authority, lucide-react, @/lib/utils
+
+[FILE] src\frontend\components\ui\pagination.tsx
+  Imports: react, lucide-react, @/lib/utils, @/frontend/components/ui/button
+  Functions: Pagination, PaginationLink, PaginationPrevious, PaginationNext, PaginationEllipsis
+
+[FILE] src\frontend\components\ui\popover.tsx
+  Imports: react, @radix-ui/react-popover, @/lib/utils
+
+[FILE] src\frontend\components\ui\progress.tsx
+  Imports: react, @radix-ui/react-progress, @/lib/utils
+
+[FILE] src\frontend\components\ui\radio-group.tsx
+  Imports: react, @radix-ui/react-radio-group, lucide-react, @/lib/utils
+
+[FILE] src\frontend\components\ui\resizable.tsx
+  Imports: lucide-react, react-resizable-panels, @/lib/utils
+  Functions: ResizablePanelGroup, ResizableHandle
+
+[FILE] src\frontend\components\ui\scroll-area.tsx
+  Imports: react, @radix-ui/react-scroll-area, @/lib/utils
+
+[FILE] src\frontend\components\ui\select.tsx
+  Imports: react, @radix-ui/react-select, lucide-react, @/lib/utils
+
+[FILE] src\frontend\components\ui\separator.tsx
+  Imports: react, @radix-ui/react-separator, @/lib/utils
+
+[FILE] src\frontend\components\ui\sheet.tsx
+  Imports: @radix-ui/react-dialog, class-variance-authority, lucide-react, react, @/lib/utils
+  Classes: SheetContentProps (Interface)
+  Functions: SheetHeader, SheetFooter
+
+[FILE] src\frontend\components\ui\sidebar.tsx
+  Imports: react, @radix-ui/react-slot, class-variance-authority, lucide-react, @/hooks/use-mobile, @/lib/utils, @/frontend/components/ui/button, @/frontend/components/ui/input, @/frontend/components/ui/separator, @/frontend/components/ui/sheet
+
+[FILE] src\frontend\components\ui\skeleton.tsx
+  Imports: @/lib/utils
+
+[FILE] src\frontend\components\ui\slider.tsx
+  Imports: react, @radix-ui/react-slider, @/lib/utils
+
+[FILE] src\frontend\components\ui\sonner.tsx
+  Imports: next-themes, sonner
+  Functions: Toaster
+
+[FILE] src\frontend\components\ui\switch.tsx
+  Imports: react, @radix-ui/react-switch, @/lib/utils
+
+[FILE] src\frontend\components\ui\table.tsx
+  Imports: react, @/lib/utils
+
+[FILE] src\frontend\components\ui\tabs.tsx
+  Imports: react, @radix-ui/react-tabs, @/lib/utils
+
+[FILE] src\frontend\components\ui\textarea.tsx
+  Imports: react, @/lib/utils
+  Classes: TextareaProps (Interface)
+
+[FILE] src\frontend\components\ui\toast.tsx
+  Imports: react, @radix-ui/react-toast, class-variance-authority, lucide-react, @/lib/utils
+
+[FILE] src\frontend\components\ui\toaster.tsx
+  Imports: @/hooks/use-toast, @/frontend/components/ui/toast
+  Functions: Toaster
+
+[FILE] src\frontend\components\ui\toggle-group.tsx
+  Imports: react, @radix-ui/react-toggle-group, class-variance-authority, @/lib/utils, @/frontend/components/ui/toggle
+
+[FILE] src\frontend\components\ui\toggle.tsx
+  Imports: react, @radix-ui/react-toggle, class-variance-authority, @/lib/utils
+
+[FILE] src\frontend\components\ui\tooltip.tsx
+  Imports: react, @radix-ui/react-tooltip, @/lib/utils
+
+[FILE] src\frontend\components\ui\use-toast.ts
+  Imports: @/hooks/use-toast
+
+[FILE] src\frontend\data\mock.ts
+  Classes: Author (Interface), Category (Interface), Post (Interface)
+
+[FILE] src\hooks\use-mobile.tsx
+  Imports: react
+
+[FILE] src\hooks\use-toast.ts
+  Imports: react, @/frontend/components/ui/toast
+  Classes: State (Interface)
+
+[FILE] src\lib\utils.ts
+  Imports: clsx, tailwind-merge
+
+[FILE] src\types\next-auth.d.ts
+  Imports: next-auth
+  Classes: Session (Interface)

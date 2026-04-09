@@ -8,6 +8,10 @@ ROOT_DIR = Path(__file__).resolve().parents[2]
 if str(ROOT_DIR) not in sys.path:
     sys.path.insert(0, str(ROOT_DIR))
 
+# Load .env from project root so GROQ_API_KEY etc. are available
+from dotenv import load_dotenv
+load_dotenv(ROOT_DIR / ".env")
+
 
 def _fallback_greenfield_plan(requirements: str) -> str:
     return (
@@ -72,6 +76,7 @@ def _build_graph(mods: Dict[str, Any]):
 
 def run_analysis(mode: str, user_input: str) -> Dict[str, Any]:
     mode = mode.lower().strip()
+    user_input = user_input.strip('\"\'')
     if mode not in {"greenfield", "brownfield"}:
         raise ValueError("mode must be 'greenfield' or 'brownfield'")
 
@@ -137,8 +142,17 @@ def run_analysis(mode: str, user_input: str) -> Dict[str, Any]:
 
     architecture_plan = result.get("architecture_plan", "") or ""
     analysis_report = result.get("analysis_report", "") or ""
-    if mode == "greenfield" and architecture_plan:
+
+    # In both modes, build graph from LLM's proposed Mermaid plan. Note that for Brownfield, 
+    # the prompt ensures it only uses real extracted components.
+    if architecture_plan:
         graph_data = mods["parse_mermaid_to_graph"](architecture_plan)
+
+    # Normalise graph_data so it always matches GraphPayload schema
+    graph_data = {
+        "nodes": graph_data.get("nodes", []),
+        "edges": graph_data.get("edges", []),
+    }
 
     return {
         "mode": mode,
