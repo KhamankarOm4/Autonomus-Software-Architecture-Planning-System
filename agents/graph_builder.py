@@ -100,7 +100,9 @@ def parse_ast_summary_to_graph(ast_summary: str) -> dict:
         if line.startswith("[FILE]"):
             current_file = line.replace("[FILE]", "").strip()
             file_id = f"file::{current_file}"
-            short = current_file.replace("\\", "/").split("/")[-1]
+            parts = current_file.replace("\\", "/").split("/")
+            # Use ParentDir/Filename.ext for clarity instead of just Filename.ext
+            short = "/".join(parts[-2:]) if len(parts) >= 2 else parts[-1]
             add_node(file_id, short, "file", 1)
 
         # Classes line
@@ -297,6 +299,18 @@ def _render_d3_html(graph_data: dict, output_file: str, title: str = "🏗️ Ar
       display:none; position:fixed; top:50%; left:50%;
       transform:translate(-50%,-50%); text-align:center; color:var(--muted);
     }}
+    #info-panel {{
+      position:fixed; top:52px; right:-350px; width:350px; bottom:0;
+      background:var(--surface); border-left:1px solid var(--border);
+      box-shadow:-4px 0 24px rgba(0,0,0,0.5);
+      transition:right 0.3s ease; padding:24px; z-index:500;
+      display:flex; flex-direction:column; gap:16px;
+    }}
+    #info-panel.open {{ right:0; }}
+    #info-close {{ align-self:flex-end; cursor:pointer; color:var(--muted); font-size:20px; line-height:1; }}
+    #info-close:hover {{ color:var(--red); }}
+    #info-title {{ font-size:18px; font-weight:600; color:var(--blue); }}
+    #info-desc {{ font-size:14px; color:var(--text); line-height:1.6; white-space:pre-wrap; }}
   </style>
 </head>
 <body>
@@ -319,6 +333,11 @@ def _render_d3_html(graph_data: dict, output_file: str, title: str = "🏗️ Ar
     <div class="tip-name" id="tip-name"></div>
     <div class="tip-type" id="tip-type"></div>
     <div class="tip-desc" id="tip-desc"></div>
+  </div>
+  <div id="info-panel">
+    <div id="info-close">×</div>
+    <div id="info-title"></div>
+    <div id="info-desc"></div>
   </div>
   <div id="empty-msg"><h2>⚠️ No graph data</h2><p>No diagram could be extracted.</p></div>
 
@@ -392,7 +411,12 @@ def _render_d3_html(graph_data: dict, output_file: str, title: str = "🏗️ Ar
       tip.style.display = "block";
     }})
     .on("mousemove", e => {{ tip.style.left=(e.clientX+16)+"px"; tip.style.top=Math.min(e.clientY+12,window.innerHeight-140)+"px"; }})
-    .on("mouseout", () => tip.style.display = "none");
+    .on("mouseout", () => tip.style.display = "none")
+    .on("click", (e,d) => {{
+      document.getElementById("info-panel").classList.add("open");
+      document.getElementById("info-title").textContent = d.label;
+      document.getElementById("info-desc").textContent = d.description || "No description available.";
+    }});
 
   // Card background
   node.append("rect").attr("class","node-bg")
@@ -430,6 +454,14 @@ def _render_d3_html(graph_data: dict, output_file: str, title: str = "🏗️ Ar
   window.addEventListener("resize", () => {{
     sim.force("center", d3.forceCenter(window.innerWidth/2,(window.innerHeight-52)/2));
     sim.alpha(0.3).restart();
+  }});
+  
+  // Close info panel logic
+  document.getElementById("info-close").addEventListener("click", () => {{
+    document.getElementById("info-panel").classList.remove("open");
+  }});
+  svg.on("click", (e) => {{
+    if(e.target.tagName === 'svg') document.getElementById("info-panel").classList.remove("open");
   }});
   </script>
 </body>

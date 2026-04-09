@@ -57,6 +57,18 @@
       display:none; position:fixed; top:50%; left:50%;
       transform:translate(-50%,-50%); text-align:center; color:var(--muted);
     }
+    #info-panel {
+      position:fixed; top:52px; right:-350px; width:350px; bottom:0;
+      background:var(--surface); border-left:1px solid var(--border);
+      box-shadow:-4px 0 24px rgba(0,0,0,0.5);
+      transition:right 0.3s ease; padding:24px; z-index:500;
+      display:flex; flex-direction:column; gap:16px;
+    }
+    #info-panel.open { right:0; }
+    #info-close { align-self:flex-end; cursor:pointer; color:var(--muted); font-size:20px; line-height:1; }
+    #info-close:hover { color:var(--red); }
+    #info-title { font-size:18px; font-weight:600; color:var(--blue); }
+    #info-desc { font-size:14px; color:var(--text); line-height:1.6; white-space:pre-wrap; }
   </style>
 </head>
 <body>
@@ -80,51 +92,182 @@
     <div class="tip-type" id="tip-type"></div>
     <div class="tip-desc" id="tip-desc"></div>
   </div>
+  <div id="info-panel">
+    <div id="info-close">×</div>
+    <div id="info-title"></div>
+    <div id="info-desc"></div>
+  </div>
   <div id="empty-msg"><h2>⚠️ No graph data</h2><p>No diagram could be extracted.</p></div>
 
   <script>
   const graphData = {
   "nodes": [
     {
-      "id": "A",
-      "label": "index.js",
-      "description": "index.js",
+      "id": "App",
+      "label": "App",
+      "description": "> UserModule",
       "type": "class"
     },
     {
-      "id": "B",
-      "label": "utils.js",
-      "description": "utils.js",
+      "id": "UserModule",
+      "label": "UserModule",
+      "description": "App --> InventoryModule",
       "type": "class"
     },
     {
-      "id": "C",
-      "label": "database.js",
-      "description": "database.js",
+      "id": "InventoryModule",
+      "label": "InventoryModule",
+      "description": "App --> PrescriptionModule",
       "type": "class"
     },
     {
-      "id": "D",
-      "label": "api.js",
-      "description": "api.js",
+      "id": "PrescriptionModule",
+      "label": "PrescriptionModule",
+      "description": "App --> SupplierManagementModule",
+      "type": "class"
+    },
+    {
+      "id": "SupplierManagementModule",
+      "label": "SupplierManagementModule",
+      "description": "UserModule --> AboutUs",
+      "type": "class"
+    },
+    {
+      "id": "AboutUs",
+      "label": "AboutUs",
+      "description": "UserModule --> ChatBot",
+      "type": "class"
+    },
+    {
+      "id": "ChatBot",
+      "label": "ChatBot",
+      "description": "UserModule --> Login",
+      "type": "class"
+    },
+    {
+      "id": "Login",
+      "label": "Login",
+      "description": "UserModule --> Navbar",
+      "type": "class"
+    },
+    {
+      "id": "Navbar",
+      "label": "Navbar",
+      "description": "InventoryModule --> Dashboard",
+      "type": "class"
+    },
+    {
+      "id": "Dashboard",
+      "label": "Dashboard",
+      "description": "InventoryModule --> Inventory",
+      "type": "class"
+    },
+    {
+      "id": "Inventory",
+      "label": "Inventory",
+      "description": "Module**: This module will contain the `Dashboard` and `Inventory` components",
+      "type": "class"
+    },
+    {
+      "id": "PrescriptionSystem",
+      "label": "PrescriptionSystem",
+      "description": "SupplierManagementModule --> DemandForecast",
+      "type": "class"
+    },
+    {
+      "id": "DemandForecast",
+      "label": "DemandForecast",
+      "description": "SupplierManagementModule --> SupplierManagement",
+      "type": "class"
+    },
+    {
+      "id": "SupplierManagement",
+      "label": "SupplierManagement",
+      "description": "DemandForecast --> DatabaseService",
+      "type": "class"
+    },
+    {
+      "id": "DatabaseService",
+      "label": "DatabaseService",
+      "description": "SupplierManagement --> DemandForecast",
       "type": "class"
     }
   ],
   "edges": [
     {
-      "source": "A",
-      "target": "B",
-      "label": "depends on"
+      "source": "App",
+      "target": "UserModule",
+      "label": "uses"
     },
     {
-      "source": "B",
-      "target": "C",
-      "label": "depends on"
+      "source": "App",
+      "target": "InventoryModule",
+      "label": "uses"
     },
     {
-      "source": "D",
-      "target": "B",
-      "label": "depends on"
+      "source": "App",
+      "target": "PrescriptionModule",
+      "label": "uses"
+    },
+    {
+      "source": "App",
+      "target": "SupplierManagementModule",
+      "label": "uses"
+    },
+    {
+      "source": "UserModule",
+      "target": "AboutUs",
+      "label": "uses"
+    },
+    {
+      "source": "UserModule",
+      "target": "ChatBot",
+      "label": "uses"
+    },
+    {
+      "source": "UserModule",
+      "target": "Login",
+      "label": "uses"
+    },
+    {
+      "source": "UserModule",
+      "target": "Navbar",
+      "label": "uses"
+    },
+    {
+      "source": "InventoryModule",
+      "target": "Dashboard",
+      "label": "uses"
+    },
+    {
+      "source": "InventoryModule",
+      "target": "Inventory",
+      "label": "uses"
+    },
+    {
+      "source": "PrescriptionModule",
+      "target": "PrescriptionSystem",
+      "label": "uses"
+    },
+    {
+      "source": "SupplierManagementModule",
+      "target": "DemandForecast",
+      "label": "uses"
+    },
+    {
+      "source": "SupplierManagementModule",
+      "target": "SupplierManagement",
+      "label": "uses"
+    },
+    {
+      "source": "DemandForecast",
+      "target": "DatabaseService",
+      "label": "uses"
+    },
+    {
+      "source": "SupplierManagement",
+      "target": "DemandForecast",
+      "label": "uses"
     }
   ]
 };
@@ -196,7 +339,12 @@
       tip.style.display = "block";
     })
     .on("mousemove", e => { tip.style.left=(e.clientX+16)+"px"; tip.style.top=Math.min(e.clientY+12,window.innerHeight-140)+"px"; })
-    .on("mouseout", () => tip.style.display = "none");
+    .on("mouseout", () => tip.style.display = "none")
+    .on("click", (e,d) => {
+      document.getElementById("info-panel").classList.add("open");
+      document.getElementById("info-title").textContent = d.label;
+      document.getElementById("info-desc").textContent = d.description || "No description available.";
+    });
 
   // Card background
   node.append("rect").attr("class","node-bg")
@@ -234,6 +382,14 @@
   window.addEventListener("resize", () => {
     sim.force("center", d3.forceCenter(window.innerWidth/2,(window.innerHeight-52)/2));
     sim.alpha(0.3).restart();
+  });
+  
+  // Close info panel logic
+  document.getElementById("info-close").addEventListener("click", () => {
+    document.getElementById("info-panel").classList.remove("open");
+  });
+  svg.on("click", (e) => {
+    if(e.target.tagName === 'svg') document.getElementById("info-panel").classList.remove("open");
   });
   </script>
 </body>
