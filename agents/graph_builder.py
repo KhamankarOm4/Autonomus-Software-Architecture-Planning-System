@@ -300,18 +300,18 @@ def _render_d3_html(graph_data: dict, output_file: str, title: str = "🏗️ Ar
       display:none; position:fixed; top:50%; left:50%;
       transform:translate(-50%,-50%); text-align:center; color:var(--muted);
     }}
-    #info-panel {
+    #info-panel {{
       position:fixed; top:52px; right:-350px; width:350px; bottom:0;
       background:var(--surface); border-left:1px solid var(--border);
       box-shadow:-4px 0 24px rgba(0,0,0,0.5);
       transition:right 0.3s ease; padding:24px; z-index:500;
       display:flex; flex-direction:column; gap:16px;
-    }
-    #info-panel.open { right:0; }
-    #info-close { align-self:flex-end; cursor:pointer; color:var(--muted); font-size:20px; line-height:1; }
-    #info-close:hover { color:var(--red); }
-    #info-title { font-size:18px; font-weight:600; color:var(--blue); }
-    #info-desc { font-size:14px; color:var(--text); line-height:1.6; white-space:pre-wrap; }
+    }}
+    #info-panel.open {{ right:0; }}
+    #info-close {{ align-self:flex-end; cursor:pointer; color:var(--muted); font-size:20px; line-height:1; }}
+    #info-close:hover {{ color:var(--red); }}
+    #info-title {{ font-size:18px; font-weight:600; color:var(--blue); }}
+    #info-desc {{ font-size:14px; color:var(--text); line-height:1.6; white-space:pre-wrap; }}
 
   </style>
 </head>
@@ -415,11 +415,11 @@ def _render_d3_html(graph_data: dict, output_file: str, title: str = "🏗️ Ar
     }})
     .on("mousemove", e => {{ tip.style.left=(e.clientX+16)+"px"; tip.style.top=Math.min(e.clientY+12,window.innerHeight-140)+"px"; }})
     .on("mouseout", () => tip.style.display = "none")
-    .on("click", (e,d) => {
+    .on("click", (e,d) => {{
       document.getElementById("info-panel").classList.add("open");
       document.getElementById("info-title").textContent = d.label;
       document.getElementById("info-desc").textContent = d.description || "No description available.";
-    });
+    }});
 
 
   // Card background
@@ -460,12 +460,12 @@ def _render_d3_html(graph_data: dict, output_file: str, title: str = "🏗️ Ar
     sim.alpha(0.3).restart();
   }});
   // Close info panel logic
-  document.getElementById("info-close").addEventListener("click", () => {
+  document.getElementById("info-close").addEventListener("click", () => {{
     document.getElementById("info-panel").classList.remove("open");
-  });
-  svg.on("click", (e) => {
+  }});
+  svg.on("click", (e) => {{
     if(e.target.tagName === 'svg') document.getElementById("info-panel").classList.remove("open");
-  });
+  }});
 
   </script>
 </body>
