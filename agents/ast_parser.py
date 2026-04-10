@@ -154,10 +154,14 @@ def generate_ast_summary(path: str) -> str:
     if os.path.isfile(path):
         process_file(path, os.path.basename(path))
     elif os.path.isdir(path):
+        # Skip unhelpful/noisy paths like shadcn UI boilerplate (substring check)
+        skip_path_substrings = ["components/ui", "components\\ui", ".next", "node_modules", "dist", "build"]
+
         for root, dirs, files in os.walk(path):
-            if should_skip(root):
+            if should_skip(root) or any(skip in root for skip in skip_path_substrings):
                 dirs.clear()
                 continue
+
             # Prune skipped subdirs in-place so os.walk won't descend
             dirs[:] = [d for d in dirs if d not in SKIP_DIRS and not d.startswith('.')]
             for file in sorted(files):

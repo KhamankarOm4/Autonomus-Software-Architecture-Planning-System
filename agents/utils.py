@@ -37,3 +37,38 @@ def read_codebase(path: str) -> str:
                     pass # ignore unreadable files
 
     return "\n".join(code_content)
+
+def extract_document_text(file_path: str) -> str:
+    """Extracts text from a given PDF, DOCX, or plain text document."""
+    ext = os.path.splitext(file_path)[1].lower()
+    
+    if ext == '.pdf':
+        try:
+            import PyPDF2
+            text = []
+            with open(file_path, "rb") as f:
+                reader = PyPDF2.PdfReader(f)
+                for page in reader.pages:
+                    text.append(page.extract_text() or "")
+            return "\n".join(text)
+        except ImportError:
+            return "Error: PyPDF2 is not installed. Run `pip install PyPDF2` to read PDFs."
+        except Exception as e:
+            return f"Error reading PDF: {e}"
+            
+    elif ext in ['.docx', '.doc']:
+        try:
+            import docx
+            doc = docx.Document(file_path)
+            return "\n".join([p.text for p in doc.paragraphs])
+        except ImportError:
+            return "Error: python-docx is not installed. Run `pip install python-docx` to read DOCX files."
+        except Exception as e:
+            return f"Error reading DOCX: {e}"
+            
+    elif ext in ['.txt', '.md']:
+        with open(file_path, "r", encoding="utf-8") as f:
+            return f.read()
+    else:
+        return f"Error: Unsupported document format '{ext}'."
+

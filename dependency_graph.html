@@ -57,6 +57,21 @@
       display:none; position:fixed; top:50%; left:50%;
       transform:translate(-50%,-50%); text-align:center; color:var(--muted);
     }
+<<<<<<< HEAD
+=======
+    #info-panel {
+      position:fixed; top:52px; right:-350px; width:350px; bottom:0;
+      background:var(--surface); border-left:1px solid var(--border);
+      box-shadow:-4px 0 24px rgba(0,0,0,0.5);
+      transition:right 0.3s ease; padding:24px; z-index:500;
+      display:flex; flex-direction:column; gap:16px;
+    }
+    #info-panel.open { right:0; }
+    #info-close { align-self:flex-end; cursor:pointer; color:var(--muted); font-size:20px; line-height:1; }
+    #info-close:hover { color:var(--red); }
+    #info-title { font-size:18px; font-weight:600; color:var(--blue); }
+    #info-desc { font-size:14px; color:var(--text); line-height:1.6; white-space:pre-wrap; }
+>>>>>>> f89a5096c362e9776c5461b5a9ae49cebb12f83a
   </style>
 </head>
 <body>
@@ -80,6 +95,14 @@
     <div class="tip-type" id="tip-type"></div>
     <div class="tip-desc" id="tip-desc"></div>
   </div>
+<<<<<<< HEAD
+=======
+  <div id="info-panel">
+    <div id="info-close">×</div>
+    <div id="info-title"></div>
+    <div id="info-desc"></div>
+  </div>
+>>>>>>> f89a5096c362e9776c5461b5a9ae49cebb12f83a
   <div id="empty-msg"><h2>⚠️ No graph data</h2><p>No diagram could be extracted.</p></div>
 
   <script>
@@ -87,26 +110,118 @@
   "nodes": [
     {
       "id": "A",
+<<<<<<< HEAD
       "label": "index.js",
       "description": "index.js",
+=======
+      "label": "AuthProvider",
+      "description": "Auth Provider",
+>>>>>>> f89a5096c362e9776c5461b5a9ae49cebb12f83a
       "type": "class"
     },
     {
       "id": "B",
+<<<<<<< HEAD
       "label": "utils.js",
       "description": "utils.js",
+=======
+      "label": "AuthController",
+      "description": "Auth Controller",
+>>>>>>> f89a5096c362e9776c5461b5a9ae49cebb12f83a
       "type": "class"
     },
     {
       "id": "C",
+<<<<<<< HEAD
       "label": "database.js",
       "description": "database.js",
+=======
+      "label": "RoleManager",
+      "description": "Role Manager",
+>>>>>>> f89a5096c362e9776c5461b5a9ae49cebb12f83a
       "type": "class"
     },
     {
       "id": "D",
+<<<<<<< HEAD
       "label": "api.js",
       "description": "api.js",
+=======
+      "label": "UserModel",
+      "description": "User Model",
+      "type": "class"
+    },
+    {
+      "id": "E",
+      "label": "ContentService",
+      "description": "Content Service",
+      "type": "class"
+    },
+    {
+      "id": "F",
+      "label": "PostModel",
+      "description": "Post Model",
+      "type": "class"
+    },
+    {
+      "id": "G",
+      "label": "CategoryModel",
+      "description": "Category Model",
+      "type": "class"
+    },
+    {
+      "id": "H",
+      "label": "AuthorModel",
+      "description": "Author Model",
+      "type": "class"
+    },
+    {
+      "id": "I",
+      "label": "PrismaClient",
+      "description": "Prisma Client",
+      "type": "class"
+    },
+    {
+      "id": "J",
+      "label": "DataAccessLayer",
+      "description": "Data Access Layer",
+      "type": "class"
+    },
+    {
+      "id": "K",
+      "label": "PageComponent",
+      "description": "Page Component",
+      "type": "class"
+    },
+    {
+      "id": "L",
+      "label": "LayoutComponent",
+      "description": "Layout Component",
+      "type": "class"
+    },
+    {
+      "id": "M",
+      "label": "PostComponent",
+      "description": "Post Component",
+      "type": "class"
+    },
+    {
+      "id": "N",
+      "label": "CategoryComponent",
+      "description": "Category Component",
+      "type": "class"
+    },
+    {
+      "id": "O",
+      "label": "CloudinaryService",
+      "description": "Cloudinary Service",
+      "type": "class"
+    },
+    {
+      "id": "P",
+      "label": "MediaModel",
+      "description": "Media Model",
+>>>>>>> f89a5096c362e9776c5461b5a9ae49cebb12f83a
       "type": "class"
     }
   ],
@@ -114,6 +229,7 @@
     {
       "source": "A",
       "target": "B",
+<<<<<<< HEAD
       "label": "depends on"
     },
     {
@@ -125,6 +241,59 @@
       "source": "D",
       "target": "B",
       "label": "depends on"
+=======
+      "label": "uses"
+    },
+    {
+      "source": "A",
+      "target": "C",
+      "label": "extends"
+    },
+    {
+      "source": "A",
+      "target": "D",
+      "label": "uses"
+    },
+    {
+      "source": "E",
+      "target": "F",
+      "label": "uses"
+    },
+    {
+      "source": "E",
+      "target": "G",
+      "label": "uses"
+    },
+    {
+      "source": "E",
+      "target": "H",
+      "label": "uses"
+    },
+    {
+      "source": "I",
+      "target": "J",
+      "label": "used by"
+    },
+    {
+      "source": "K",
+      "target": "L",
+      "label": "uses"
+    },
+    {
+      "source": "K",
+      "target": "M",
+      "label": "uses"
+    },
+    {
+      "source": "K",
+      "target": "N",
+      "label": "uses"
+    },
+    {
+      "source": "O",
+      "target": "P",
+      "label": "used by"
+>>>>>>> f89a5096c362e9776c5461b5a9ae49cebb12f83a
     }
   ]
 };
@@ -196,7 +365,16 @@
       tip.style.display = "block";
     })
     .on("mousemove", e => { tip.style.left=(e.clientX+16)+"px"; tip.style.top=Math.min(e.clientY+12,window.innerHeight-140)+"px"; })
+<<<<<<< HEAD
     .on("mouseout", () => tip.style.display = "none");
+=======
+    .on("mouseout", () => tip.style.display = "none")
+    .on("click", (e,d) => {
+      document.getElementById("info-panel").classList.add("open");
+      document.getElementById("info-title").textContent = d.label;
+      document.getElementById("info-desc").textContent = d.description || "No description available.";
+    });
+>>>>>>> f89a5096c362e9776c5461b5a9ae49cebb12f83a
 
   // Card background
   node.append("rect").attr("class","node-bg")
@@ -235,6 +413,17 @@
     sim.force("center", d3.forceCenter(window.innerWidth/2,(window.innerHeight-52)/2));
     sim.alpha(0.3).restart();
   });
+<<<<<<< HEAD
+=======
+  
+  // Close info panel logic
+  document.getElementById("info-close").addEventListener("click", () => {
+    document.getElementById("info-panel").classList.remove("open");
+  });
+  svg.on("click", (e) => {
+    if(e.target.tagName === 'svg') document.getElementById("info-panel").classList.remove("open");
+  });
+>>>>>>> f89a5096c362e9776c5461b5a9ae49cebb12f83a
   </script>
 </body>
 </html>

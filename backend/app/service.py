@@ -46,7 +46,7 @@ def _imports() -> Dict[str, Any]:
     from agents.memory import forget_memory, retrieve_memory, train_memory
     from agents.router import router
     from agents.state import AgentState
-    from agents.utils import read_codebase
+    from agents.utils import read_codebase, extract_document_text
 
     return {
         "StateGraph": StateGraph,
@@ -60,7 +60,7 @@ def _imports() -> Dict[str, Any]:
         "parse_mermaid_to_graph": parse_mermaid_to_graph,
         "train_memory": train_memory,
         "retrieve_memory": retrieve_memory,
-        "forget_memory": forget_memory,
+        "extract_document_text": extract_document_text,
     }
 
 
@@ -111,6 +111,11 @@ def run_analysis(mode: str, user_input: str) -> Dict[str, Any]:
             "memory_used": memory_used,
             "warning": warning,
         }
+    if mode == "greenfield" and os.path.exists(user_input) and os.path.isfile(user_input):
+        extracted = mods["extract_document_text"](user_input)
+        if not extracted.startswith("Error"):
+            input_payload = extracted
+
 
     if mode == "brownfield" and os.path.exists(user_input):
         readme_path = os.path.join(user_input, "README.md")
